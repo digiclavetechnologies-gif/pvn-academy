@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
-  ArrowRight, Award, BookOpen, Check, ChevronDown, Clock3, ExternalLink, GraduationCap,
+  ArrowRight, Award, Bell, BookOpen, Check, ChevronDown, Clock3, ExternalLink, GraduationCap,
   Heart, Instagram, Laptop, Lightbulb, MapPin, Menu, MessageCircle, Phone, Play, Quote,
+  Smartphone,
   ShieldCheck, Sparkles, Star, Target, Users, X, Youtube
 } from 'lucide-react';
 import './styles.css';
@@ -24,9 +25,10 @@ const CONFIG = {
   emailFormspreeEndpoint: '',
   logo: '/padmini_logo.png',
   heroPhoto: '/pvn-students-group.jpeg',
+  studentAppUrl: 'https://ehkku.on-app.in/app/home?orgCode=ehkku',
   youtube: [
     { name: 'Padmini Vidhya Niketan', url: 'https://youtube.com/@padminividhyaniketan', description: 'Concepts made simple, one lesson at a time.', videos: [] },
-    { name: 'PVN Edu', url: 'https://youtube.com/@pvnedu', description: 'Exam-ready learning for ambitious students.', videos: [] }
+    { name: 'Padmini Vidhya Niketan Edu', url: 'https://youtube.com/@pvnedu', description: 'Exam-ready learning for ambitious students.', videos: [] }
   ],
   courses: [
     { name: 'Class 10th', detail: 'Strong foundations for board success', icon: BookOpen },
@@ -114,10 +116,11 @@ function App() {
     <header className="site-header">
       <a className="brand" href="#home" aria-label="Padmini Vidhya Niketan home">
         <img src={CONFIG.logo} alt="Padmini Vidhya Niketan logo" />
-        <span><strong>PVN</strong><small>Laxmi Nagar</small></span>
+        <span><strong>Padmini Vidhya Niketan</strong><small>Coaching institute · Laxmi Nagar</small></span>
       </a>
       <nav className={menuOpen ? 'nav open' : 'nav'} aria-label="Main navigation">
         {navItems.map((item) => <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setMenuOpen(false)}>{item}</a>)}
+        <a className="nav-app" href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Student App <ExternalLink size={14} /></a>
         <a className="nav-cta" href="#book">Book Free Demo <ArrowRight size={16} /></a>
       </nav>
       <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? 'Close menu' : 'Open menu'}>{menuOpen ? <X /> : <Menu />}</button>
@@ -134,6 +137,7 @@ function App() {
           <div className="hero-actions">
             <a className="button primary" href="#book">Book Free Demo Class <ArrowRight size={18} /></a>
             <a className="button ghost" href={CONFIG.phoneHref}><Phone size={17} /> Call Now</a>
+            <a className="button app-button" href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer"><Smartphone size={17} /> Student App <ExternalLink size={14} /></a>
           </div>
           <div className="hero-trust"><div className="avatar-stack"><span>AV</span><span>SK</span><span>RJ</span></div><span>Parents choose us for <b>personal attention</b></span></div>
         </div>
@@ -151,8 +155,17 @@ function App() {
         {CONFIG.highlights.map(([number, label]) => <div className="highlight" key={label}><strong>{number}</strong><span>{label}</span></div>)}
       </section>
 
+      <section className="app-promo-section">
+        <div className="app-promo reveal">
+          <div className="app-promo-icon"><Smartphone size={27} /></div>
+          <div className="app-promo-copy"><span className="eyebrow">Learning, all together</span><h2>Learn on our App</h2><p>Notes, classes and updates in one place.</p></div>
+          <div className="app-promo-features"><span><BookOpen size={16} /> Notes</span><span><Play size={16} /> Classes</span><span><Bell size={16} /> Updates</span></div>
+          <a className="button primary" href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer">Open App <ExternalLink size={15} /></a>
+        </div>
+      </section>
+
       <section className="section why" id="why">
-        <SectionTitle eyebrow="Why PVN" title="A little extra care makes a big difference." copy={CONFIG.about} />
+        <SectionTitle eyebrow="Why Padmini Vidhya Niketan" title="A little extra care makes a big difference." copy={CONFIG.about} />
         <div className="feature-grid">{[
           [Sparkles, '10 Days Free Trial Classes'], [BookOpen, 'Twice Revision Before Annual Exam'], [Award, 'Study Material Provided'], [Check, 'Weekly Exams'],
           [MessageCircle, 'Doubt Clearing Sessions'], [Laptop, 'English Medium'], [Heart, 'Individual Guidance'], [Users, 'Offline + Online Batches']
@@ -200,7 +213,7 @@ function App() {
       <section className="contact-section" id="contact"><div className="contact-inner"><SectionTitle eyebrow="Come say hello" title="Your classroom is closer than you think." copy="Drop by for a chat, a campus visit or simply a quick question on WhatsApp." /><div className="contact-grid"><div className="contact-details"><a href={CONFIG.phoneHref}><Phone size={19} /><span><small>Call us</small>{CONFIG.phone}</span></a><a href={CONFIG.whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={19} /><span><small>WhatsApp us</small>Usually replies quickly</span></a><div><MapPin size={19} /><span><small>Find us</small>{CONFIG.address}</span></div><div><Clock3 size={19} /><span><small>Opening hours</small>{CONFIG.hours}</span></div></div><div className="map-card"><div className="map-grid" /><MapPin size={34} /><b>Laxmi Nagar</b><span>F-246, Gali No. 3, Mangal Bazar</span><a href="https://www.google.com/maps/search/?api=1&query=F-246+Gali+No+3+Mangal+Bazar+Laxmi+Nagar+Delhi" target="_blank" rel="noreferrer">Get directions <ArrowRight size={15} /></a></div></div></div></section>
     </main>
 
-    <footer><div className="footer-inner"><div className="footer-brand"><img src={CONFIG.logo} alt="Padmini Vidhya Niketan logo" /><p>Making learning clearer, kinder and more confident.</p></div><div><h4>Explore</h4>{navItems.slice(0, 5).map((item) => <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>)}</div><div><h4>Connect</h4><a href={CONFIG.phoneHref}>{CONFIG.phone}</a><a href={CONFIG.whatsapp}>WhatsApp us</a>{CONFIG.youtube.map((channel) => <a href={channel.url} key={channel.name}>YouTube · {channel.name === 'PVN Edu' ? 'PVN Edu' : 'PVN'}</a>)}</div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Padmini Vidhya Niketan</span><span>Made with care in Laxmi Nagar <Heart size={14} fill="currentColor" /></span></div></footer>
+    <footer><div className="footer-inner"><div className="footer-brand"><img src={CONFIG.logo} alt="Padmini Vidhya Niketan logo" /><p>Making learning clearer, kinder and more confident.</p></div><div><h4>Explore</h4>{navItems.slice(0, 5).map((item) => <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>)}</div><div><h4>Connect</h4><a href={CONFIG.phoneHref}>{CONFIG.phone}</a><a href={CONFIG.whatsapp}>WhatsApp us</a><a href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer">Student App <ExternalLink size={13} /></a>{CONFIG.youtube.map((channel) => <a href={channel.url} key={channel.name}>YouTube · {channel.name}</a>)}</div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Padmini Vidhya Niketan</span><span>Made with care in Laxmi Nagar <Heart size={14} fill="currentColor" /></span></div></footer>
     <div className="mobile-bar"><a href={CONFIG.phoneHref}><Phone size={18} /> Call</a><a href={CONFIG.whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={18} /> WhatsApp</a></div>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ '@context': 'https://schema.org', '@type': 'LocalBusiness', name: CONFIG.name, address: { '@type': 'PostalAddress', streetAddress: CONFIG.address, addressLocality: 'New Delhi', postalCode: '110092', addressCountry: 'IN' }, telephone: CONFIG.phone, aggregateRating: { '@type': 'AggregateRating', ratingValue: CONFIG.rating, reviewCount: CONFIG.reviewCount } }) }} />
   </div>;
