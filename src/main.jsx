@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
-  ArrowRight, Award, Bell, BookOpen, Check, ChevronDown, Clock3, ExternalLink, GraduationCap,
-  Heart, Instagram, Laptop, Lightbulb, MapPin, Menu, MessageCircle, Phone, Play, Quote,
-  Smartphone,
-  ShieldCheck, Sparkles, Star, Target, Users, X, Youtube
+  ArrowRight, Award, Bell, BookOpen, Check, Clock3, ExternalLink,
+  Heart, Laptop, MapPin, Menu, MessageCircle, Phone, Play, Smartphone,
+  Star, Users, X, Youtube
 } from 'lucide-react';
 import './styles.css';
 
@@ -22,23 +21,15 @@ const CONFIG = {
   rating: '5.0',
   reviewCount: 28,
   SHOW_FEES: false,
-  emailFormspreeEndpoint: '',
   logo: '/padmini_logo.png',
   heroPhoto: '/pvn-students-group.jpeg',
   studentAppUrl: 'https://ehkku.on-app.in/app/home?orgCode=ehkku',
+  mapEmbedUrl: 'https://www.google.com/maps?q=F-246%2C%20Gali%20No.%203%2C%20Mangal%20Bazar%2C%20Laxmi%20Nagar%2C%20Delhi%20110092&output=embed',
   youtube: [
-    { name: 'Padmini Vidhya Niketan', url: 'https://youtube.com/@padminividhyaniketan', description: 'Concepts made simple, one lesson at a time.', videos: [] },
-    { name: 'Padmini Vidhya Niketan Edu', url: 'https://youtube.com/@pvnedu', description: 'Exam-ready learning for ambitious students.', videos: [] }
+    { name: 'Padmini Vidhya Niketan', url: 'https://youtube.com/@padminividhyaniketan' },
+    { name: 'Padmini Vidhya Niketan Edu', url: 'https://youtube.com/@pvnedu' }
   ],
-  courses: [
-    { name: 'Class 10th', detail: 'Strong foundations for board success', icon: BookOpen },
-    { name: 'Class 11th', detail: 'Build confidence with every concept', icon: Lightbulb },
-    { name: 'Class 12th', detail: 'Focused support for your final year', icon: Target },
-    { name: 'JEE Maths', detail: 'Problem-solving that goes beyond the textbook', icon: Sparkles },
-    { name: 'CA Foundation', detail: 'Clear concepts for a confident start', icon: GraduationCap },
-    { name: 'CMA Foundation', detail: 'A structured path to your professional goal', icon: Award },
-    { name: 'CMA Inter (OMSM)', detail: 'Specialist guidance for advanced learners', icon: ShieldCheck }
-  ],
+  courses: ['Class 10th', 'Class 11th', 'Class 12th', 'JEE Maths', 'CA Foundation', 'CMA Foundation', 'CMA Inter (OMSM)'],
   timetable: [
     { name: 'Class 10', slots: ['Mon / Wed / Fri · 5–6 PM', 'Tue / Thu / Sat · 6–7 PM'] },
     { name: 'Class 11', slots: ['Mon / Wed / Fri · 7–8 PM', 'Tue / Thu / Sat · 5–6 PM'] },
@@ -77,9 +68,19 @@ const CONFIG = {
 
 const navItems = ['Home', 'Courses', 'Faculty', 'Results', 'Videos', 'Contact'];
 const waMessage = (text) => `${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+const cleanText = (value, limit) => String(value ?? '')
+  .replace(/[\u0000-\u001f\u007f]/g, ' ')
+  .replace(/<[^>]*>/g, '')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .slice(0, limit);
 
 function useReveal() {
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
+      return undefined;
+    }
     const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
       if (entry.isIntersecting) entry.target.classList.add('is-visible');
     }), { threshold: 0.12 });
@@ -88,8 +89,8 @@ function useReveal() {
   }, []);
 }
 
-function SectionTitle({ eyebrow, title, copy, light = false }) {
-  return <div className={`section-title reveal ${light ? 'light' : ''}`}>
+function SectionTitle({ eyebrow, title, copy }) {
+  return <div className="section-title reveal">
     <span className="eyebrow">{eyebrow}</span>
     <h2>{title}</h2>
     {copy && <p>{copy}</p>}
@@ -98,18 +99,78 @@ function SectionTitle({ eyebrow, title, copy, light = false }) {
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeBatch, setActiveBatch] = useState('Class 10');
-  const [review, setReview] = useState(0);
   const [formState, setFormState] = useState('idle');
   useReveal();
 
+  useEffect(() => {
+    document.title = window.location.pathname === '/' || window.location.pathname === '/index.html'
+      ? 'Padmini Vidhya Niketan | Coaching in Laxmi Nagar, Delhi'
+      : 'Page not found | Padmini Vidhya Niketan';
+  }, []);
+
+  if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+    return <main className="not-found"><span className="eyebrow">Padmini Vidhya Niketan</span><h1>Page not found</h1><p>The page you’re looking for isn’t here.</p><a className="button primary" href="/">Return to home</a></main>;
+  }
+
   const submitForm = (event) => {
     event.preventDefault();
-    const data = Object.fromEntries(new FormData(event.currentTarget));
-    setFormState('loading');
-    const text = `Hello Padmini Vidhya Niketan! I would like to book a free demo class.%0AStudent: ${data.student}%0AParent: ${data.parent}%0APhone: ${data.phone}%0AClass: ${data.class}%0ABatch: ${data.batch}%0AMode: ${data.mode}%0AMessage: ${data.message || 'None'}`;
-    window.open(`${CONFIG.whatsapp}?text=${text}`, '_blank', 'noopener,noreferrer');
-    setTimeout(() => setFormState('success'), 500);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    if (formData.get('website')) return;
+    const data = {
+      name: cleanText(formData.get('name'), 80),
+      parent: cleanText(formData.get('parent'), 80),
+      phone: cleanText(formData.get('phone'), 24),
+      className: cleanText(formData.get('class'), 40),
+      batch: cleanText(formData.get('batch'), 40),
+      mode: cleanText(formData.get('mode'), 20),
+      message: cleanText(formData.get('message'), 500)
+    };
+    const phoneDigits = data.phone.replace(/\D/g, '');
+    const phoneInput = form.elements.phone;
+    const classInput = form.elements.namedItem('class');
+    const batchInput = form.elements.namedItem('batch');
+    const modeInput = form.elements.namedItem('mode');
+    phoneInput.setCustomValidity('');
+    classInput.setCustomValidity('');
+    batchInput.setCustomValidity('');
+    modeInput.setCustomValidity('');
+    if (!/^\+?[\d\s()-]{10,24}$/.test(data.phone) || phoneDigits.length < 10 || phoneDigits.length > 15) {
+      phoneInput.setCustomValidity('Enter a valid phone number with 10 to 15 digits.');
+      form.reportValidity();
+      return;
+    }
+    if (!['10th', '11th', '12th', 'JEE Maths', 'CA Foundation', 'CMA Foundation', 'CMA Inter OMSM'].includes(data.className)) {
+      classInput.setCustomValidity('Choose a class from the list.');
+    }
+    if (!['Mon-Wed-Fri', 'Tue-Thu-Sat'].includes(data.batch)) {
+      batchInput.setCustomValidity('Choose a batch from the list.');
+    }
+    if (!['Offline', 'Online'].includes(data.mode)) {
+      modeInput.setCustomValidity('Choose a mode from the list.');
+    }
+    form.elements.namedItem('name').setCustomValidity(data.name ? '' : 'Enter a student name.');
+    form.elements.namedItem('parent').setCustomValidity(data.parent ? '' : 'Enter a parent or guardian name.');
+    if (!data.name || !data.parent || !data.className || !data.batch || !data.mode || classInput.validationMessage || batchInput.validationMessage || modeInput.validationMessage) {
+      form.reportValidity();
+      return;
+    }
+
+    const message = [
+      'Hello Padmini Vidhya Niketan, I would like to book a free demo class.',
+      `Student: ${data.name}`,
+      `Parent: ${data.parent}`,
+      `Phone: ${data.phone}`,
+      `Class: ${data.className}`,
+      `Batch: ${data.batch}`,
+      `Mode: ${data.mode}`,
+      `Message: ${data.message || 'None'}`
+    ].join('\n');
+    const appUrl = new URL(CONFIG.whatsapp);
+    appUrl.searchParams.set('text', message);
+    window.open(appUrl.toString(), '_blank', 'noopener,noreferrer');
+    setFormState('success');
+    form.reset();
   };
 
   return <div className="app">
@@ -130,23 +191,22 @@ function App() {
       <section id="home" className="hero">
         <div className="blob blob-one" /><div className="blob blob-two" />
         <div className="hero-content reveal">
-          <div className="pill"><span className="pulse-dot" /> Trusted learning since 18+ years</div>
-          <h1>Learn with clarity.<br /><span>Grow with confidence.</span></h1>
-          <p className="hero-lead">{CONFIG.tagline}</p>
-          <p className="hero-sub">Offline & Online Batches <i /> English Medium <i /> Individual Guidance</p>
+          <div className="pill">Coaching in Laxmi Nagar, Delhi</div>
+          <h1>{CONFIG.tagline}</h1>
+          <p className="hero-lead">Offline &amp; Online Batches · English Medium · Individual Guidance</p>
+          <p className="hero-sub">Also offering JEE Maths, CA Foundation and CMA coaching.</p>
           <div className="hero-actions">
             <a className="button primary" href="#book">Book Free Demo Class <ArrowRight size={18} /></a>
-            <a className="button ghost" href={CONFIG.phoneHref}><Phone size={17} /> Call Now</a>
+            <a className="button ghost" href={CONFIG.phoneHref} target="_blank" rel="noopener noreferrer"><Phone size={17} /> Call Now</a>
             <a className="button app-button" href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer"><Smartphone size={17} /> Student App <ExternalLink size={14} /></a>
           </div>
-          <div className="hero-trust"><div className="avatar-stack"><span>AV</span><span>SK</span><span>RJ</span></div><span>Parents choose us for <b>personal attention</b></span></div>
+          <div className="hero-trust"><Star size={16} fill="currentColor" /><span><b>{CONFIG.rating} on Google</b> · {CONFIG.reviewCount} reviews</span></div>
         </div>
         <div className="hero-visual reveal">
           <div className="hero-card">
-            <div className="hero-student"><img src={CONFIG.heroPhoto} alt="Padmini Vidhya Niketan faculty and students" /></div>
-            <div className="float-badge badge-trial"><Sparkles size={16} /><span><b>10 Days</b><small>Free Trial Classes</small></span></div>
+            <div className="hero-student"><img src={CONFIG.heroPhoto} alt="Amaarendra Kumar with students of Padmini Vidhya Niketan" fetchPriority="high" /></div>
+            <div className="float-badge badge-trial"><span><b>10 Days</b><small>Free Trial Classes</small></span></div>
             <div className="float-badge badge-rating"><Star size={16} fill="currentColor" /><span><b>5.0</b><small>on Google · 28 reviews</small></span></div>
-            <div className="scribble">Your success<br /><b>starts here</b> ✦</div>
           </div>
         </div>
       </section>
@@ -158,64 +218,62 @@ function App() {
       <section className="app-promo-section">
         <div className="app-promo reveal">
           <div className="app-promo-icon"><Smartphone size={27} /></div>
-          <div className="app-promo-copy"><span className="eyebrow">Learning, all together</span><h2>Learn on our App</h2><p>Notes, classes and updates in one place.</p></div>
+          <div className="app-promo-copy"><span className="eyebrow">Student App</span><h2>Learn on our App</h2><p>Notes, classes and updates in one place.</p></div>
           <div className="app-promo-features"><span><BookOpen size={16} /> Notes</span><span><Play size={16} /> Classes</span><span><Bell size={16} /> Updates</span></div>
           <a className="button primary" href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer">Open App <ExternalLink size={15} /></a>
         </div>
       </section>
 
       <section className="section why" id="why">
-        <SectionTitle eyebrow="Why Padmini Vidhya Niketan" title="A little extra care makes a big difference." copy={CONFIG.about} />
+        <SectionTitle eyebrow="Why Padmini Vidhya Niketan" title="Class features" copy={CONFIG.about} />
         <div className="feature-grid">{[
-          [Sparkles, '10 Days Free Trial Classes'], [BookOpen, 'Twice Revision Before Annual Exam'], [Award, 'Study Material Provided'], [Check, 'Weekly Exams'],
+          [BookOpen, '10 Days Free Trial Classes'], [BookOpen, 'Twice Revision Before Annual Exam'], [Award, 'Notes on Student App'], [Check, 'Weekly Exams'],
           [MessageCircle, 'Doubt Clearing Sessions'], [Laptop, 'English Medium'], [Heart, 'Individual Guidance'], [Users, 'Offline + Online Batches']
         ].map(([Icon, text]) => <div className="feature-card reveal" key={text}><div className="icon-box"><Icon size={20} /></div><h3>{text}</h3><span className="arrow-circle"><ArrowRight size={15} /></span></div>)}</div>
       </section>
 
       <section className="section courses-section" id="courses">
-        <SectionTitle eyebrow="Explore programmes" title="The right support for every next step." copy="From school foundations to professional courses, learn in a focused, encouraging environment." />
-        <div className="course-grid">{CONFIG.courses.map(({ name, detail, icon: Icon }, index) => <article className={`course-card reveal ${index === 2 ? 'featured-course' : ''}`} key={name}>
-          <div className="course-icon"><Icon size={22} /></div><span className="course-number">0{index + 1}</span><h3>{name}</h3><p>{detail}</p>
-          <a href={waMessage(`Hello, I would like to enquire about ${name}.`)} target="_blank" rel="noreferrer">Enquire <ArrowRight size={15} /></a>
+        <SectionTitle eyebrow="Courses" title="Classes and programmes" copy="Coaching for Class 10th, 11th, 12th, JEE Maths, CA Foundation and CMA." />
+        <div className="course-grid">{CONFIG.courses.map((name) => <article className="course-card reveal" key={name}>
+          <h3>{name}</h3>
+          <a href={waMessage(`Hello, I would like to enquire about ${name}.`)} target="_blank" rel="noopener noreferrer">Enquire <ArrowRight size={15} /></a>
         </article>)}</div>
       </section>
 
       <section className="section timetable-section" id="timetable">
         <div className="timetable-layout">
-          <SectionTitle eyebrow="Plan your week" title="A batch that fits your rhythm." copy="Choose a schedule that keeps learning consistent and manageable." />
-          <div className="batch-tabs" role="tablist">{CONFIG.timetable.map((batch) => <button key={batch.name} className={activeBatch === batch.name ? 'active' : ''} onClick={() => setActiveBatch(batch.name)}>{batch.name}</button>)}</div>
-          <div className="schedule-card"><div className="schedule-icon"><Clock3 /></div><div><span className="eyebrow">Available timing</span><h3>{activeBatch}</h3>{CONFIG.timetable.find((batch) => batch.name === activeBatch).slots.map((slot) => <p key={slot}><Check size={16} />{slot}</p>)}</div><a className="button small primary" href="#book">Ask about this batch <ArrowRight size={15} /></a></div>
+          <SectionTitle eyebrow="Batch timetable" title="Class times" />
+          <div className="timetable-wrap"><table className="timetable"><thead><tr><th scope="col">Class / Programme</th><th scope="col">Batch timings</th></tr></thead><tbody>{CONFIG.timetable.map((batch) => <tr key={batch.name}><th scope="row">{batch.name}</th><td>{batch.slots.join(' · ')}</td></tr>)}</tbody></table></div>
         </div>
       </section>
 
       <section className="section faculty-section" id="faculty">
-        <SectionTitle eyebrow="Meet your mentor" title="Guidance that makes concepts click." copy="Learn from experienced educators who care about how you learn, not just what you score." />
-        <div className="faculty-card reveal"><div className="faculty-photo"><img src={CONFIG.faculty.photo} alt={`${CONFIG.faculty.name}, faculty at Padmini Vidhya Niketan`} /></div><div className="faculty-info"><span className="tag">{CONFIG.faculty.badge}</span><h3>{CONFIG.faculty.name}</h3><p className="credentials">{CONFIG.faculty.credentials}</p><p>{CONFIG.faculty.bio}</p><div className="teach-box"><b>Teaches</b><span>{CONFIG.faculty.teaches}</span></div><a className="text-link" href="#book">Talk to Amaarendra sir <ArrowRight size={16} /></a></div></div></section>
+        <SectionTitle eyebrow="Faculty" title="Meet the faculty" />
+        <div className="faculty-card reveal"><div className="faculty-photo"><img loading="lazy" decoding="async" src={CONFIG.faculty.photo} alt={`${CONFIG.faculty.name}, faculty at Padmini Vidhya Niketan`} /></div><div className="faculty-info"><span className="tag">{CONFIG.faculty.badge}</span><h3>{CONFIG.faculty.name}</h3><p className="credentials">{CONFIG.faculty.credentials}</p><p>{CONFIG.faculty.bio}</p><div className="teach-box"><b>Teaches</b><span>{CONFIG.faculty.teaches}</span></div><a className="text-link" href="#book">Enquire about classes <ArrowRight size={16} /></a></div></div></section>
 
       <section className="section results-section" id="results">
-        <SectionTitle eyebrow="Celebrating effort" title="Our toppers, our happy moments." copy="Every score is a story of steady practice, patient guidance and a student who kept going." />
-        <div className="topper-grid">{CONFIG.toppers.map(({ name, score, photo }, index) => <div className="topper-card reveal" key={`${name}-${index}`}><img className="topper-avatar" src={photo} alt={`${name}, ${score}% result`} /><div><h3>{name}</h3><span>Class topper</span></div><b>{score}%</b></div>)}</div>
+        <SectionTitle eyebrow="Results" title="Our toppers" />
+        <div className="topper-grid">{CONFIG.toppers.map(({ name, score, photo }, index) => <figure className="topper-card reveal" key={`${name}-${index}`}><img className="topper-avatar" loading="lazy" decoding="async" src={photo} alt={name} /><figcaption><strong>{name}</strong><span>{score}%</span></figcaption></figure>)}</div>
       </section>
 
       <section className="section videos-section" id="videos">
-        <SectionTitle eyebrow="Learn beyond the classroom" title="Small lessons. Big lightbulb moments." copy="Find helpful explainers and exam-focused guidance on our YouTube channels." />
-        <div className="channel-grid">{CONFIG.youtube.map((channel) => <article className="channel-card reveal" key={channel.name}><div className="channel-thumb"><Youtube size={44} /><div className="play"><Play size={15} fill="currentColor" /></div></div><div className="channel-copy"><span className="eyebrow">YouTube channel</span><h3>{channel.name}</h3><p>{channel.description}</p><a className="button small dark" href={channel.url} target="_blank" rel="noreferrer">Subscribe <ExternalLink size={14} /></a></div></article>)}</div>
+        <SectionTitle eyebrow="Videos" title="YouTube channels" />
+        <div className="channel-grid">{CONFIG.youtube.map((channel) => <article className="channel-card reveal" key={channel.name}><div className="channel-copy"><Youtube size={24} /><h3>{channel.name}</h3><a className="text-link" href={channel.url} target="_blank" rel="noopener noreferrer">Subscribe <ExternalLink size={14} /></a></div></article>)}</div>
       </section>
 
       <section className="reviews-section">
-        <div className="reviews-inner"><SectionTitle eyebrow="Kind words" title="Students feel the difference." light /><div className="review-wrap"><Quote className="quote-mark" size={54} /><div className="review-card"><div className="stars">{[1, 2, 3, 4, 5].map((star) => <Star key={star} fill="currentColor" size={17} />)}</div><blockquote>“{CONFIG.reviews[review]}”</blockquote><span>Verified student review</span></div><div className="review-controls"><button onClick={() => setReview((review + CONFIG.reviews.length - 1) % CONFIG.reviews.length)} aria-label="Previous review">←</button><span>0{review + 1} / 0{CONFIG.reviews.length}</span><button onClick={() => setReview((review + 1) % CONFIG.reviews.length)} aria-label="Next review">→</button></div></div><div className="review-badge"><Star fill="currentColor" size={20} /><b>5.0</b><span>on Google<br />{CONFIG.reviewCount} reviews</span></div></div>
+        <div className="reviews-inner"><div className="section-title"><span className="eyebrow">Reviews</span><h2>Student reviews</h2><p className="review-rating">{[1, 2, 3, 4, 5].map((star) => <Star key={star} size={16} fill="currentColor" aria-hidden="true" />)} <strong>{CONFIG.rating} on Google · {CONFIG.reviewCount} reviews</strong></p></div><div className="review-list">{CONFIG.reviews.map((text) => <blockquote key={text}>“{text}”</blockquote>)}</div></div>
       </section>
 
       <section className="section booking-section" id="book">
-        <div className="booking-layout"><div><SectionTitle eyebrow="Your first step" title="Ready to make learning feel lighter?" copy="Book a free demo class and experience our way of teaching. No pressure, just a friendly conversation." /><div className="booking-note"><Check size={17} /> 10 days of free trial classes</div><div className="booking-note"><Check size={17} /> Offline and online options</div><div className="booking-note"><Check size={17} /> Individual guidance from day one</div></div><form className="booking-form reveal" onSubmit={submitForm}><div className="form-heading"><span className="eyebrow">Book your free demo</span><h3>Let's get to know you.</h3></div><div className="form-row"><label>Student name<input required name="student" placeholder="Your name" /></label><label>Parent name<input required name="parent" placeholder="Parent / guardian name" /></label></div><div className="form-row"><label>Phone number<input required name="phone" type="tel" pattern="[0-9+ ()-]{10,}" placeholder="+91 ..." /></label><label>Class<select required name="class"><option value="">Select class</option>{['10th', '11th', '12th', 'JEE Maths', 'CA Foundation', 'CMA Foundation', 'CMA Inter OMSM'].map((item) => <option key={item}>{item}</option>)}</select></label></div><div className="form-row"><label>Preferred batch<select required name="batch"><option>Mon-Wed-Fri</option><option>Tue-Thu-Sat</option></select></label><label>Mode<select required name="mode"><option>Offline</option><option>Online</option></select></label></div><label>Message (optional)<textarea name="message" rows="3" placeholder="Anything you'd like us to know?"></textarea></label><button className="button primary form-submit" disabled={formState === 'loading'}>{formState === 'loading' ? 'Opening WhatsApp…' : formState === 'success' ? <><Check size={17} /> Thank you! We will contact you shortly.</> : <>Send enquiry <ArrowRight size={17} /></>}</button><small className="form-disclaimer">Your enquiry opens WhatsApp with a prefilled message. Email/Formspree can be enabled in CONFIG.</small></form></div>
+        <div className="booking-layout"><div><SectionTitle eyebrow="Demo class" title="Book a free demo class" copy="Call or message Padmini Vidhya Niketan to ask about a class." /><div className="booking-note"><Check size={17} /> 10 days of free trial classes</div><div className="booking-note"><Check size={17} /> Offline and online batches</div><div className="booking-note"><Check size={17} /> Individual guidance</div></div><form className="booking-form reveal" onSubmit={submitForm}><div className="form-heading"><span className="eyebrow">Demo class enquiry</span><h3>Student details</h3></div><label className="honeypot" aria-hidden="true">Leave this field empty<input tabIndex="-1" autoComplete="off" name="website" /></label><div className="form-row"><label>Student name<input required maxLength="80" name="name" autoComplete="name" placeholder="Student name" /></label><label>Parent name<input required maxLength="80" name="parent" autoComplete="name" placeholder="Parent or guardian name" /></label></div><div className="form-row"><label>Phone number<input required maxLength="24" name="phone" type="tel" inputMode="tel" pattern="[0-9+ ()-]{10,24}" autoComplete="tel" placeholder="+91 ..." /></label><label>Class<select required name="class"><option value="">Select class</option>{['10th', '11th', '12th', 'JEE Maths', 'CA Foundation', 'CMA Foundation', 'CMA Inter OMSM'].map((item) => <option key={item}>{item}</option>)}</select></label></div><div className="form-row"><label>Preferred batch<select required name="batch"><option value="">Select batch</option><option>Mon-Wed-Fri</option><option>Tue-Thu-Sat</option></select></label><label>Mode<select required name="mode"><option value="">Select mode</option><option>Offline</option><option>Online</option></select></label></div><label>Message (optional)<textarea maxLength="500" name="message" rows="3" placeholder="Message"></textarea></label><label className="consent"><input required type="checkbox" name="consent" /> I agree to share these details via WhatsApp. <a href="/privacy.html">Privacy Policy</a></label><button className="button primary form-submit">{formState === 'success' ? <><Check size={17} /> WhatsApp opened. We will contact you shortly.</> : <>Continue to WhatsApp <ArrowRight size={17} /></>}</button><small className="form-disclaimer">Your details are placed in a WhatsApp message; this website does not store enquiries.</small></form></div>
       </section>
 
-      <section className="contact-section" id="contact"><div className="contact-inner"><SectionTitle eyebrow="Come say hello" title="Your classroom is closer than you think." copy="Drop by for a chat, a campus visit or simply a quick question on WhatsApp." /><div className="contact-grid"><div className="contact-details"><a href={CONFIG.phoneHref}><Phone size={19} /><span><small>Call us</small>{CONFIG.phone}</span></a><a href={CONFIG.whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={19} /><span><small>WhatsApp us</small>Usually replies quickly</span></a><div><MapPin size={19} /><span><small>Find us</small>{CONFIG.address}</span></div><div><Clock3 size={19} /><span><small>Opening hours</small>{CONFIG.hours}</span></div></div><div className="map-card"><div className="map-grid" /><MapPin size={34} /><b>Laxmi Nagar</b><span>F-246, Gali No. 3, Mangal Bazar</span><a href="https://www.google.com/maps/search/?api=1&query=F-246+Gali+No+3+Mangal+Bazar+Laxmi+Nagar+Delhi" target="_blank" rel="noreferrer">Get directions <ArrowRight size={15} /></a></div></div></div></section>
+      <section className="contact-section" id="contact"><div className="contact-inner"><SectionTitle eyebrow="Contact" title="Visit Padmini Vidhya Niketan" copy={CONFIG.address} /><div className="contact-grid"><div className="contact-details"><a href={CONFIG.phoneHref} target="_blank" rel="noopener noreferrer"><Phone size={19} /><span><small>Phone</small>{CONFIG.phone}</span></a><a href={CONFIG.whatsapp} target="_blank" rel="noopener noreferrer"><MessageCircle size={19} /><span><small>WhatsApp</small>Message Padmini Vidhya Niketan</span></a><div><MapPin size={19} /><span><small>Address</small>{CONFIG.address}</span></div><div><Clock3 size={19} /><span><small>Hours</small>{CONFIG.hours}</span></div></div><iframe className="map-frame" loading="lazy" title="Map showing Padmini Vidhya Niketan in Laxmi Nagar, Delhi" src={CONFIG.mapEmbedUrl} referrerPolicy="no-referrer-when-downgrade" /></div></div></section>
     </main>
 
-    <footer><div className="footer-inner"><div className="footer-brand"><img src={CONFIG.logo} alt="Padmini Vidhya Niketan logo" /><p>Making learning clearer, kinder and more confident.</p></div><div><h4>Explore</h4>{navItems.slice(0, 5).map((item) => <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>)}</div><div><h4>Connect</h4><a href={CONFIG.phoneHref}>{CONFIG.phone}</a><a href={CONFIG.whatsapp}>WhatsApp us</a><a href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer">Student App <ExternalLink size={13} /></a>{CONFIG.youtube.map((channel) => <a href={channel.url} key={channel.name}>YouTube · {channel.name}</a>)}</div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Padmini Vidhya Niketan</span><span>Made with care in Laxmi Nagar <Heart size={14} fill="currentColor" /></span></div></footer>
-    <div className="mobile-bar"><a href={CONFIG.phoneHref}><Phone size={18} /> Call</a><a href={CONFIG.whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={18} /> WhatsApp</a></div>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ '@context': 'https://schema.org', '@type': 'LocalBusiness', name: CONFIG.name, address: { '@type': 'PostalAddress', streetAddress: CONFIG.address, addressLocality: 'New Delhi', postalCode: '110092', addressCountry: 'IN' }, telephone: CONFIG.phone, aggregateRating: { '@type': 'AggregateRating', ratingValue: CONFIG.rating, reviewCount: CONFIG.reviewCount } }) }} />
+    <footer><div className="footer-inner"><div className="footer-brand"><img loading="lazy" src={CONFIG.logo} alt="Padmini Vidhya Niketan logo" /><p>{CONFIG.name}<br />{CONFIG.address}</p></div><div><h4>Sections</h4>{navItems.slice(0, 5).map((item) => <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>)}</div><div><h4>Contact</h4><a href={CONFIG.phoneHref} target="_blank" rel="noopener noreferrer">{CONFIG.phone}</a><a href={CONFIG.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp us</a><a href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer">Student App <ExternalLink size={13} /></a>{CONFIG.youtube.map((channel) => <a href={channel.url} target="_blank" rel="noopener noreferrer" key={channel.name}>YouTube · {channel.name}</a>)}<a href="/privacy.html">Privacy Policy</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Padmini Vidhya Niketan</span></div></footer>
+    <div className="mobile-bar"><a href={CONFIG.phoneHref} target="_blank" rel="noopener noreferrer"><Phone size={18} /> Call</a><a href={CONFIG.whatsapp} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} /> WhatsApp</a></div>
   </div>;
 }
 
