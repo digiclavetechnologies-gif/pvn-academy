@@ -57,7 +57,7 @@ const CONFIG = {
     { name: 'Jessica Saini', score: 95, photo: '/result-jessica-saini.jpeg' },
     { name: 'Priyanshu Sati', score: 95, photo: '/result-priyanshu-sati.jpeg' },
     { name: 'Jaanvi Khemka', score: 94, photo: '/result-jaanvi-khemka.jpeg' },
-    { name: 'Karan', score: 92, photo: '/result-karan-92.jpeg' },
+    { name: 'Karan', score: 92, photo: '/result-karan-92.jpeg', objectPosition: 'center 65%' },
     { name: 'Tushnika Chaudhary', score: 90, photo: '/result-tushnika.jpeg' }
   ],
   reviews: [
@@ -255,7 +255,7 @@ function App() {
 
       <section className="section results-section" id="results">
         <SectionTitle eyebrow="Results" title="Our toppers" />
-        <div className="topper-grid">{CONFIG.toppers.map(({ name, score, photo }, index) => <figure className="topper-card reveal" key={`${name}-${index}`}><img className="topper-avatar" loading="lazy" decoding="async" src={photo} alt={name} /><figcaption><strong>{name}</strong><span>{score}%</span></figcaption></figure>)}</div>
+        <div className="topper-grid">{CONFIG.toppers.map(({ name, score, photo, objectPosition }, index) => <figure className="topper-card reveal" key={`${name}-${index}`}><img className="topper-avatar" loading="lazy" decoding="async" src={photo} alt={name} style={objectPosition ? { objectPosition } : undefined} /><figcaption><strong>{name}</strong><span>{score}%</span></figcaption></figure>)}</div>
       </section>
 
       <section className="section videos-section" id="videos">
