@@ -57,7 +57,7 @@ const CONFIG = {
     { name: 'Jessica Saini', score: 95, photo: '/result-jessica-saini.jpeg' },
     { name: 'Priyanshu Sati', score: 95, photo: '/result-priyanshu-sati.jpeg' },
     { name: 'Jaanvi Khemka', score: 94, photo: '/result-jaanvi-khemka.jpeg' },
-    { name: 'Karan', score: 92, photo: '/result-karan-92.jpeg', objectPosition: 'center 65%' },
+    { name: 'Karan', score: 92, photo: '/result-karan-92.jpeg', objectPosition: 'center 10%' },
     { name: 'Tushnika Chaudhary', score: 90, photo: '/result-tushnika.jpeg' }
   ],
   reviews: [
