@@ -47,7 +47,7 @@ const CONFIG = {
     { name: 'JEE Maths', slots: ['Contact us for timings'] }
   ],
   faculty: {
-    name: 'Amarendra Kumar',
+    name: 'Amaarendra Kumar',
     photo: '/faculty-amarendra.jpeg',
     badge: 'ICSI & ICMAI Visiting Faculty',
     credentials: 'M.Sc (Maths), M.Phil · 18+ years of teaching experience',
@@ -177,7 +177,7 @@ function App() {
 
       <section className="section faculty-section" id="faculty">
         <SectionTitle eyebrow="Meet your mentor" title="Guidance that makes concepts click." copy="Learn from experienced educators who care about how you learn, not just what you score." />
-        <div className="faculty-card reveal"><div className="faculty-photo"><img src={CONFIG.faculty.photo} alt={`${CONFIG.faculty.name}, faculty at Padmini Vidhya Niketan`} /></div><div className="faculty-info"><span className="tag">{CONFIG.faculty.badge}</span><h3>{CONFIG.faculty.name}</h3><p className="credentials">{CONFIG.faculty.credentials}</p><p>{CONFIG.faculty.bio}</p><div className="teach-box"><b>Teaches</b><span>{CONFIG.faculty.teaches}</span></div><a className="text-link" href="#book">Talk to Amarendra sir <ArrowRight size={16} /></a></div></div></section>
+        <div className="faculty-card reveal"><div className="faculty-photo"><img src={CONFIG.faculty.photo} alt={`${CONFIG.faculty.name}, faculty at Padmini Vidhya Niketan`} /></div><div className="faculty-info"><span className="tag">{CONFIG.faculty.badge}</span><h3>{CONFIG.faculty.name}</h3><p className="credentials">{CONFIG.faculty.credentials}</p><p>{CONFIG.faculty.bio}</p><div className="teach-box"><b>Teaches</b><span>{CONFIG.faculty.teaches}</span></div><a className="text-link" href="#book">Talk to Amaarendra sir <ArrowRight size={16} /></a></div></div></section>
 
       <section className="section results-section" id="results">
         <SectionTitle eyebrow="Celebrating effort" title="Our toppers, our happy moments." copy="Every score is a story of steady practice, patient guidance and a student who kept going." />
