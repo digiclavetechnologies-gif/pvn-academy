@@ -51,7 +51,7 @@ const CONFIG = {
     photo: '/faculty-amarendra.jpeg',
     badge: 'ICSI & ICMAI Visiting Faculty',
     credentials: 'M.Sc (Maths), M.Phil · 18+ years of teaching experience',
-    bio: 'Specialist in Statistics, Operation Management and Operation Research. Visiting faculty of ICSI and ICMAI, member of the editorial board of various publications. Teaching style is based on conceptual clarity, effective and adaptive.',
+    bio: 'Specialist in Mathematics, Statistics and Operations Research. Visiting faculty of ICSI and ICMAI, member of the editorial board of various publications. Teaching style is based on conceptual clarity, effective and adaptive.',
     teaches: 'Class 11–12 Maths, IIT-JEE, CA Foundation, CMA Foundation, CMA Inter (Operation Management), CA Final (Operation Research), CS Foundation (Statistics), Graduation and MBA (Maths, Statistics, Quantitative Technique).'
   },
   toppers: [
