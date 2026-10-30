@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   ArrowRight, Award, Bell, BookOpen, Check, Clock3, ExternalLink,
-  Heart, Laptop, MapPin, Menu, MessageCircle, Phone, Play, Smartphone,
+  Heart, Instagram, Laptop, MapPin, Menu, MessageCircle, Phone, Play, Smartphone,
   Star, Users, X, Youtube
 } from 'lucide-react';
 import './styles.css';
@@ -24,7 +24,7 @@ const CONFIG = {
   logo: '/padmini_logo.png',
   heroPhoto: '/pvn-students-group.jpeg',
   studentAppUrl: 'https://ehkku.on-app.in/app/home?orgCode=ehkku',
-  instagramUrl: 'https://www.instagram.com/padmini_vidhyaniketan?vrfl=MTZld3o5cjR6NjZibQ==',
+  instagramUrl: 'https://www.instagram.com/padmini_vidhyaniketan?vrfl=MTZld3o5cjR6NjZibQ%3D%3D',
   email: 'Pvnedudelhi@gmail.com',
   mapEmbedUrl: 'https://www.google.com/maps?q=F-246%2C%20Gali%20No.%203%2C%20Mangal%20Bazar%2C%20Laxmi%20Nagar%2C%20Delhi%20110092&output=embed',
   youtube: [
@@ -201,6 +201,7 @@ function App() {
             <a className="button primary" href="#book">Book Free Demo Class <ArrowRight size={18} /></a>
             <a className="button ghost" href={CONFIG.phoneHref} target="_blank" rel="noopener noreferrer"><Phone size={17} /> Call Now</a>
             <a className="button app-button" href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer"><Smartphone size={17} /> Student App <ExternalLink size={14} /></a>
+            <a className="button instagram-button" href={CONFIG.instagramUrl} target="_blank" rel="noopener noreferrer"><Instagram size={17} /> Instagram <ExternalLink size={14} /></a>
           </div>
           <div className="hero-trust"><Star size={16} fill="currentColor" /><span><b>{CONFIG.rating} on Google</b> · {CONFIG.reviewCount} reviews</span></div>
         </div>

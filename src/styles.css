@@ -50,6 +50,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .button:active { transform: translateY(1px); box-shadow: none; }
 .button.primary { background: var(--blue); color: #fff; }
 .button.ghost, .app-button { border-color: var(--line); background: #fff; color: var(--navy); }
+.instagram-button { border-color: var(--line); background: #fff; color: var(--navy); }
 .hero-trust { display: flex; align-items: center; gap: 8px; margin-top: 24px; color: #7a520c; font-size: 13px; }
 .hero-trust b { color: var(--navy); }
 .hero-card { position: relative; min-height: 368px; padding: 28px; display: grid; place-items: center; background: #edf3fa; border: 1px solid #d5dfeb; box-shadow: 0 5px 0 #d5dfeb, 0 16px 28px #17213a12; perspective: 900px; transition: transform .3s ease, box-shadow .3s ease; }
