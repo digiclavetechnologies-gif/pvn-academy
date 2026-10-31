@@ -242,7 +242,7 @@ footer { padding: 48px 24px 20px; background: #20204f; color: #fff; }
   .timetable th, .timetable td { padding: 12px 10px; font-size: 12px; }
   .faculty-card { grid-template-columns: 1fr; }
   .faculty-photo, .faculty-photo img { min-height: 280px; max-height: 360px; }
-  .faculty-photo img { object-position: center 25%; }
+  .faculty-photo img { min-height: 0; max-height: none; object-position: center 25%; }
   .faculty-info { padding: 24px; }
   .faculty-info h3 { font-size: 26px; }
   .topper-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px; }
@@ -511,19 +511,31 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .timetable th, .timetable td { padding: 17px 20px; }
 .timetable tbody tr:nth-child(even) { background: #fafaff; }
 .timetable tbody th { color: var(--navy); }
-.faculty-section { background: linear-gradient(135deg, #f5f5fb, #fbf9f2); }
+.faculty-section { position: relative; isolation: isolate; background: linear-gradient(135deg, #f8f8fc, #fbf9f2); }
+.faculty-section::before { position: absolute; z-index: -1; top: 0; right: 0; width: min(36vw, 460px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(255 215 106 / 23%), transparent 70%); content: ""; pointer-events: none; }
 .faculty-card {
-  overflow: hidden;
+  grid-template-columns: .9fr 1.1fr;
+  overflow: visible;
   border: 1px solid #e3e3ed;
   border-radius: 24px;
+  background: #fff;
   box-shadow: 0 8px 0 #e8e7ef, 0 24px 50px rgb(43 42 107 / 8%);
 }
-.faculty-photo { background: #e8e7f1; }
+.faculty-photo { position: relative; isolation: isolate; overflow: visible; background: transparent; }
+.faculty-photo::before { position: absolute; z-index: -1; inset: 20px; transform: translate(12px, 12px); border-radius: 20px; background: var(--navy); content: ""; }
+.faculty-photo img { position: absolute; z-index: 1; inset: 12px; width: calc(100% - 24px); height: calc(100% - 24px); min-height: 0; max-height: none; border-radius: 20px; }
+.faculty-experience-badge { position: absolute; z-index: 2; top: 30px; left: 12px; padding: 10px 14px; border: 1px solid rgb(255 255 255 / 70%); border-radius: 999px; background: var(--gold-gradient); box-shadow: 0 8px 20px rgb(32 35 60 / 16%); color: #27234e; font-size: 12px; font-weight: 800; }
 .faculty-info { padding: clamp(28px, 4vw, 52px); }
 .tag { border-left: 0; border-radius: 999px; background: #f5f1e7; color: #634b17; padding: 7px 12px; }
 .faculty-info h3 { font-size: clamp(28px, 3vw, 36px); letter-spacing: -.035em; }
-.credentials { color: var(--navy); }
+.faculty-info .credentials { color: var(--muted); }
 .teach-box { border: 0; border-left: 3px solid var(--warm); border-radius: 0 14px 14px 0; background: #f6f5fb; line-height: 1.7; }
+.faculty-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.faculty-stats span { min-height: 36px; padding: 8px 11px; display: inline-flex; align-items: center; border: 1px solid #e7e5f1; border-radius: 999px; background: #f7f6fc; color: var(--navy); font-size: 11px; font-weight: 700; }
+.faculty-info .text-link { min-height: 46px; padding: 0 18px; display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; background: var(--navy); color: #fff; box-shadow: 0 6px 16px rgb(43 42 107 / 16%); transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.faculty-info .text-link:hover { transform: translateY(-2px); background: #393783; box-shadow: 0 9px 20px rgb(43 42 107 / 22%); }
+.faculty-info .text-link svg { transition: transform .2s ease; }
+.faculty-info .text-link:hover svg { transform: translateX(4px); }
 .results-section { background: #fff; }
 .topper-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 .topper-card {
@@ -631,7 +643,7 @@ footer { background: linear-gradient(115deg, #242353, #302f72); }
   .course-card a { padding-inline: 10px; font-size: 11px; }
   .timetable-wrap { margin-inline: -18px; padding-inline: 18px; border-radius: 0; }
   .timetable { min-width: 500px; }
-  .faculty-card { border-radius: 19px; }
+  .faculty-card { grid-template-columns: 1fr; border-radius: 19px; }
   .faculty-info { padding: 24px 20px; }
   .faculty-photo, .faculty-photo img { min-height: 280px; max-height: 360px; }
   .topper-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }

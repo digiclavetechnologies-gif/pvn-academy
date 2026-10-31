@@ -335,7 +335,7 @@ function App() {
 
       <section className="section faculty-section" id="faculty">
         <SectionTitle eyebrow="Faculty" title="Meet the faculty" />
-        <div className="faculty-card reveal"><div className="faculty-photo"><img loading="lazy" decoding="async" src={CONFIG.faculty.photo} alt={`${CONFIG.faculty.name}, faculty at Padmini Vidhya Niketan`} /></div><div className="faculty-info"><span className="tag">{CONFIG.faculty.badge}</span><h3>{CONFIG.faculty.name}</h3><p className="credentials">{CONFIG.faculty.credentials}</p><p>{CONFIG.faculty.bio}</p><div className="teach-box"><b>Teaches</b><span>{CONFIG.faculty.teaches}</span></div><a className="text-link" href="#book">Enquire about classes <ArrowRight size={16} /></a></div></div></section>
+        <div className="faculty-card reveal"><div className="faculty-photo"><img width="800" height="786" loading="lazy" decoding="async" src={CONFIG.faculty.photo} alt={`${CONFIG.faculty.name}, faculty at Padmini Vidhya Niketan`} /><span className="faculty-experience-badge">18+ Years Experience</span></div><div className="faculty-info"><span className="tag">{CONFIG.faculty.badge}</span><h3>{CONFIG.faculty.name}</h3><p className="credentials">{CONFIG.faculty.credentials}</p><p>{CONFIG.faculty.bio}</p><div className="teach-box"><b>Teaches</b><span>{CONFIG.faculty.teaches}</span></div><div className="faculty-stats" aria-label="Faculty highlights"><span><strong>18+ Years</strong></span><span>ICSI &amp; ICMAI Faculty</span><span>Class 11 to CA Final</span></div><a className="text-link" href="#book">Enquire about classes <ArrowRight size={16} /></a></div></div></section>
 
       <section className="section results-section" id="results">
         <SectionTitle eyebrow="Results" title="Our toppers" />
