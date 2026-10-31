@@ -4,9 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "predev": "node scripts/generate-seo-pages.mjs",
     "dev": "vite",
-    "prebuild": "node scripts/generate-seo-pages.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

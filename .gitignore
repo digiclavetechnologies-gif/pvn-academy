@@ -3,3 +3,5 @@ dist/
 .env
 .env.*
 !.env.example
+Bill & ID Proof/
+WhatsApp Image*.jpeg

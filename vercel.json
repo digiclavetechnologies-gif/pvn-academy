@@ -1,14 +1,4 @@
 {
-  "rewrites": [
-    { "source": "/class-10-coaching-laxmi-nagar", "destination": "/class-10-coaching-laxmi-nagar.html" },
-    { "source": "/class-11-coaching-laxmi-nagar", "destination": "/class-11-coaching-laxmi-nagar.html" },
-    { "source": "/class-12-coaching-laxmi-nagar", "destination": "/class-12-coaching-laxmi-nagar.html" },
-    { "source": "/jee-maths-coaching-laxmi-nagar", "destination": "/jee-maths-coaching-laxmi-nagar.html" },
-    { "source": "/ca-foundation-coaching-laxmi-nagar", "destination": "/ca-foundation-coaching-laxmi-nagar.html" },
-    { "source": "/cma-coaching-laxmi-nagar", "destination": "/cma-coaching-laxmi-nagar.html" },
-    { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/thank-you", "destination": "/thank-you.html" }
-  ],
   "headers": [
     {
       "source": "/(.*)",

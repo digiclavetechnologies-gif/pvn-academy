@@ -11,8 +11,8 @@ import './styles.css';
 const CONFIG = {
   name: 'Padmini Vidhya Niketan',
   location: 'Laxmi Nagar',
-  tagline: 'Coaching for Classes 10–12, JEE Maths, CA and CMA',
-  about: 'Padmini Vidhya Niketan offers coaching for Classes 10–12, JEE Maths, CA Foundation and CMA in Laxmi Nagar, Delhi.',
+  tagline: 'Best Coaching for Class 10th, 11th & 12th',
+  about: 'A premier institute in Laxmi Nagar, Delhi offering coaching for Class 10th, 11th, 12th, JEE Maths, CA Foundation and CMA.',
   phone: '+91 99110 00896',
   phoneHref: 'tel:+919911000896',
   whatsapp: 'https://wa.me/919911000896',
@@ -106,7 +106,7 @@ function App() {
 
   useEffect(() => {
     document.title = window.location.pathname === '/' || window.location.pathname === '/index.html'
-      ? 'Coaching in Laxmi Nagar, Delhi | Padmini Vidhya Niketan'
+      ? 'Padmini Vidhya Niketan | Coaching in Laxmi Nagar, Delhi'
       : 'Page not found | Padmini Vidhya Niketan';
   }, []);
 
