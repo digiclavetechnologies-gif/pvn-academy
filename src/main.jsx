@@ -69,6 +69,15 @@ const CONFIG = {
 };
 
 const navItems = ['Home', 'Courses', 'Faculty', 'Results', 'Videos', 'Contact'];
+const COURSE_DESCRIPTIONS = {
+  'Class 10th': 'Concept-focused guidance for Class 10 studies.',
+  'Class 11th': 'Build a strong base for senior school subjects.',
+  'Class 12th': 'Stay focused on your Class 12 coursework.',
+  'JEE Maths': 'Practice maths concepts and problem-solving.',
+  'CA Foundation': 'Structured support for CA Foundation studies.',
+  'CMA Foundation': 'Build your foundation in CMA subjects.',
+  'CMA Inter (OMSM)': 'Focused coaching for CMA Inter (OMSM).'
+};
 const waMessage = (text) => `${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
 const cleanText = (value, limit) => String(value ?? '')
   .replace(/[\u0000-\u001f\u007f]/g, ' ')
@@ -282,8 +291,8 @@ function App() {
         <div className="course-grid">{CONFIG.courses.map((name) => {
           const CourseIcon = /JEE|CA|CMA/.test(name) ? Award : BookOpen;
           return <article className="course-card reveal" key={name}>
-          <div className="course-name"><span className="course-icon"><CourseIcon size={20} aria-hidden="true" /></span><h3>{name}</h3></div>
-          <a href={waMessage(`Hello, I would like to enquire about ${name}.`)} target="_blank" rel="noopener noreferrer">Enquire <ArrowRight size={15} /></a>
+          <div className="course-name"><span className="course-icon"><CourseIcon size={20} aria-hidden="true" /></span><div className="course-copy"><h3>{name}</h3><p>{COURSE_DESCRIPTIONS[name]}</p></div></div>
+          <a className="course-enquire" href={waMessage(`Hello, I would like to enquire about ${name}.`)} target="_blank" rel="noopener noreferrer">Enquire <ArrowRight size={15} /></a>
         </article>;
         })}</div>
       </section>
