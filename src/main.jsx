@@ -21,8 +21,8 @@ const CONFIG = {
   rating: '5.0',
   reviewCount: 28,
   SHOW_FEES: false,
-  logo: '/padmini_logo.png',
-  heroPhoto: '/pvn-students-group.jpeg',
+  logo: '/padmini_logo.webp',
+  heroPhoto: '/pvn-students-group.webp',
   studentAppUrl: 'https://ehkku.on-app.in/app/home?orgCode=ehkku',
   instagramUrl: 'https://www.instagram.com/padmini_vidhyaniketan?vrfl=MTZld3o5cjR6NjZibQ%3D%3D',
   email: 'Pvnedudelhi@gmail.com',
@@ -43,22 +43,22 @@ const CONFIG = {
   ],
   faculty: {
     name: 'Amaarendra Kumar',
-    photo: '/faculty-amarendra.jpeg',
+    photo: '/faculty-amarendra.webp',
     badge: 'ICSI & ICMAI Visiting Faculty',
     credentials: 'M.Sc (Maths), M.Phil · 18+ years of teaching experience',
     bio: 'Specialist in Mathematics, Statistics and Operations Research. Visiting faculty of ICSI and ICMAI, member of the editorial board of various publications. Teaching style is based on conceptual clarity, effective and adaptive.',
     teaches: 'Class 11–12 Maths, IIT-JEE, CA Foundation, CMA Foundation, CMA Inter (Operation Management), CA Final (Operation Research), CS Foundation (Statistics), Graduation and MBA (Maths, Statistics, Quantitative Technique).'
   },
   toppers: [
-    { name: 'Bhumika', score: 96, photo: '/result-bhumika.jpeg' },
-    { name: 'Karan', score: 95, photo: '/result-karan-95.jpeg' },
-    { name: 'Khushi', score: 95, photo: '/result-khushi.jpeg' },
-    { name: 'Ankita', score: 95, photo: '/result-ankita.jpeg' },
-    { name: 'Jessica Saini', score: 95, photo: '/result-jessica-saini.jpeg' },
-    { name: 'Priyanshu Sati', score: 95, photo: '/result-priyanshu-sati.jpeg' },
-    { name: 'Jaanvi Khemka', score: 94, photo: '/result-jaanvi-khemka.jpeg' },
-    { name: 'Karan', score: 92, photo: '/result-karan-92.jpeg', objectPosition: 'center 10%' },
-    { name: 'Tushnika Chaudhary', score: 90, photo: '/result-tushnika.jpeg' }
+    { name: 'Bhumika', score: 96, photo: '/result-bhumika.webp' },
+    { name: 'Karan', score: 95, photo: '/result-karan-95.webp' },
+    { name: 'Khushi', score: 95, photo: '/result-khushi.webp' },
+    { name: 'Ankita', score: 95, photo: '/result-ankita.webp' },
+    { name: 'Jessica Saini', score: 95, photo: '/result-jessica-saini.webp' },
+    { name: 'Priyanshu Sati', score: 95, photo: '/result-priyanshu-sati.webp' },
+    { name: 'Jaanvi Khemka', score: 94, photo: '/result-jaanvi-khemka.webp' },
+    { name: 'Karan', score: 92, photo: '/result-karan-92.webp', objectPosition: 'center 10%' },
+    { name: 'Tushnika Chaudhary', score: 90, photo: '/result-tushnika.webp' }
   ],
   reviews: [
     'The highlighting point is the quality and commitment of the teaching staff.',
@@ -91,6 +91,37 @@ function useReveal() {
   }, []);
 }
 
+function useHighlightCounters() {
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const counters = document.querySelectorAll('.highlight strong');
+    const frames = new Set();
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      const original = entry.target.textContent;
+      const match = original.match(/^([\d.]+)(.*)$/);
+      if (!match) return;
+      const target = Number(match[1]);
+      const precision = (match[1].split('.')[1] || '').length;
+      const start = performance.now();
+      const animate = (now) => {
+        const progress = Math.min((now - start) / 850, 1);
+        const eased = 1 - (1 - progress) ** 3;
+        entry.target.textContent = `${(target * eased).toFixed(precision)}${match[2]}`;
+        if (progress < 1) frames.add(requestAnimationFrame(animate));
+        else entry.target.textContent = original;
+      };
+      frames.add(requestAnimationFrame(animate));
+    }), { threshold: 0.6 });
+    counters.forEach((counter) => observer.observe(counter));
+    return () => {
+      observer.disconnect();
+      frames.forEach(cancelAnimationFrame);
+    };
+  }, []);
+}
+
 function SectionTitle({ eyebrow, title, copy }) {
   return <div className="section-title reveal">
     <span className="eyebrow">{eyebrow}</span>
@@ -103,6 +134,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formState, setFormState] = useState('idle');
   useReveal();
+  useHighlightCounters();
 
   useEffect(() => {
     document.title = window.location.pathname === '/' || window.location.pathname === '/index.html'
@@ -199,6 +231,7 @@ function App() {
           <p className="hero-sub">Also offering JEE Maths, CA Foundation and CMA coaching.</p>
           <div className="hero-actions">
             <a className="button primary" href="#book">Book Free Demo Class <ArrowRight size={18} /></a>
+            <a className="button whatsapp-button" href={CONFIG.whatsapp} target="_blank" rel="noopener noreferrer"><MessageCircle size={17} /> WhatsApp us</a>
             <a className="button ghost" href={CONFIG.phoneHref} target="_blank" rel="noopener noreferrer"><Phone size={17} /> Call Now</a>
             <a className="button app-button" href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer"><Smartphone size={17} /> Student App <ExternalLink size={14} /></a>
             <a className="button instagram-button" href={CONFIG.instagramUrl} target="_blank" rel="noopener noreferrer"><Instagram size={17} /> Instagram <ExternalLink size={14} /></a>
@@ -237,10 +270,13 @@ function App() {
 
       <section className="section courses-section" id="courses">
         <SectionTitle eyebrow="Courses" title="Classes and programmes" copy="Coaching for Class 10th, 11th, 12th, JEE Maths, CA Foundation and CMA." />
-        <div className="course-grid">{CONFIG.courses.map((name) => <article className="course-card reveal" key={name}>
-          <h3>{name}</h3>
+        <div className="course-grid">{CONFIG.courses.map((name) => {
+          const CourseIcon = /JEE|CA|CMA/.test(name) ? Award : BookOpen;
+          return <article className="course-card reveal" key={name}>
+          <div className="course-name"><span className="course-icon"><CourseIcon size={20} aria-hidden="true" /></span><h3>{name}</h3></div>
           <a href={waMessage(`Hello, I would like to enquire about ${name}.`)} target="_blank" rel="noopener noreferrer">Enquire <ArrowRight size={15} /></a>
-        </article>)}</div>
+        </article>;
+        })}</div>
       </section>
 
       <section className="section timetable-section" id="timetable">
@@ -256,7 +292,7 @@ function App() {
 
       <section className="section results-section" id="results">
         <SectionTitle eyebrow="Results" title="Our toppers" />
-        <div className="topper-grid">{CONFIG.toppers.map(({ name, score, photo, objectPosition }, index) => <figure className="topper-card reveal" key={`${name}-${index}`}><img className="topper-avatar" loading="lazy" decoding="async" src={photo} alt={name} style={objectPosition ? { objectPosition } : undefined} /><figcaption><strong>{name}</strong><span>{score}%</span></figcaption></figure>)}</div>
+        <div className="topper-grid">{CONFIG.toppers.map(({ name, score, photo, objectPosition }, index) => <figure className="topper-card reveal" key={`${name}-${index}`}><img className="topper-avatar" loading="lazy" decoding="async" src={photo} alt={`${name}, student topper at Padmini Vidhya Niketan`} style={objectPosition ? { objectPosition } : undefined} /><figcaption><strong>{name}</strong><span>{score}%</span></figcaption></figure>)}</div>
       </section>
 
       <section className="section videos-section" id="videos">
