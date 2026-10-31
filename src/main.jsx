@@ -69,6 +69,7 @@ const CONFIG = {
 };
 
 const navItems = ['Home', 'Courses', 'Faculty', 'Results', 'Videos', 'Contact'];
+const googleReviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${CONFIG.name}, ${CONFIG.address}`)}`;
 const COURSE_DESCRIPTIONS = {
   'Class 10th': 'Concept-focused guidance for Class 10 studies.',
   'Class 11th': 'Build a strong base for senior school subjects.',
@@ -257,7 +258,7 @@ function App() {
   return <div className="app">
     <header className="site-header">
       <a className="brand" href="#home" aria-label="Padmini Vidhya Niketan home">
-        <img src={CONFIG.logo} alt="Padmini Vidhya Niketan logo" />
+        <img src={CONFIG.logo} width="800" height="298" alt="Padmini Vidhya Niketan logo" />
         <span><strong>Padmini Vidhya Niketan</strong><small>Coaching institute · Laxmi Nagar</small></span>
       </a>
       <nav className={menuOpen ? 'nav open' : 'nav'} aria-label="Main navigation">
@@ -287,7 +288,7 @@ function App() {
         </div>
         <div className="hero-visual reveal">
           <div className="hero-card">
-            <div className="hero-student"><img src={CONFIG.heroPhoto} width="1280" height="960" alt="Amaarendra Kumar with students of Padmini Vidhya Niketan" fetchpriority="high" /></div>
+            <div className="hero-student"><img src={CONFIG.heroPhoto} width="1200" height="900" alt="Amaarendra Kumar with students of Padmini Vidhya Niketan" fetchpriority="high" /></div>
             <div className="float-badge badge-trial"><span><b>10 Days</b><small>Free Trial Classes</small></span></div>
             <div className="float-badge badge-rating"><Star size={16} fill="currentColor" /><span><b>5.0</b><small>on Google · 28 reviews</small></span></div>
           </div>
@@ -353,7 +354,7 @@ function App() {
       </section>
 
       <section className="reviews-section">
-        <div className="reviews-inner"><div className="section-title"><span className="eyebrow">Reviews</span><h2>Student reviews</h2><p className="review-rating">{[1, 2, 3, 4, 5].map((star) => <Star key={star} size={16} fill="currentColor" aria-hidden="true" />)} <strong>{CONFIG.rating} on Google · {CONFIG.reviewCount} reviews</strong></p></div><div className="review-list">{CONFIG.reviews.map((text) => <blockquote key={text}>“{text}”</blockquote>)}</div></div>
+        <div className="reviews-inner"><div className="section-title"><span className="eyebrow">Reviews</span><h2>Student reviews</h2><p className="review-rating">{[1, 2, 3, 4, 5].map((star) => <Star key={star} size={16} fill="currentColor" aria-hidden="true" />)} <strong>{CONFIG.rating} on Google · {CONFIG.reviewCount} reviews</strong></p></div><div className="review-list">{CONFIG.reviews.map((text) => <blockquote key={text}>“{text}”</blockquote>)}</div><a className="button review-google-button" href={googleReviewUrl} target="_blank" rel="noopener noreferrer"><Star size={16} fill="currentColor" aria-hidden="true" /> Review us on Google <ExternalLink size={14} aria-hidden="true" /></a></div>
       </section>
 
       <section className="section booking-section" id="book">
@@ -363,7 +364,7 @@ function App() {
       <section className="contact-section" id="contact"><div className="contact-inner"><SectionTitle eyebrow="Contact" title="Visit Padmini Vidhya Niketan" copy={CONFIG.address} /><div className="contact-grid"><div className="contact-details"><a href={CONFIG.phoneHref} target="_blank" rel="noopener noreferrer"><Phone size={19} /><span><small>Phone</small>{CONFIG.phone}</span></a><a href={CONFIG.whatsapp} target="_blank" rel="noopener noreferrer"><MessageCircle size={19} /><span><small>WhatsApp</small>Message Padmini Vidhya Niketan</span></a><div><MapPin size={19} /><span><small>Address</small>{CONFIG.address}</span></div><div><Clock3 size={19} /><span><small>Hours</small>{CONFIG.hours}</span></div></div><iframe className="map-frame" loading="lazy" title="Map showing Padmini Vidhya Niketan in Laxmi Nagar, Delhi" src={CONFIG.mapEmbedUrl} referrerPolicy="no-referrer-when-downgrade" /></div></div></section>
     </main>
 
-    <footer><div className="footer-inner"><div className="footer-brand"><img loading="lazy" src={CONFIG.logo} alt="Padmini Vidhya Niketan logo" /><p>{CONFIG.name}<br />{CONFIG.address}</p></div><div><h4>Sections</h4>{navItems.slice(0, 5).map((item) => <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>)}</div><div><h4>Contact</h4><a href={CONFIG.phoneHref} target="_blank" rel="noopener noreferrer">{CONFIG.phone}</a><a href={CONFIG.email ? `mailto:${CONFIG.email}` : '#'} target="_blank" rel="noopener noreferrer">{CONFIG.email}</a><a href={CONFIG.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp us</a><a href={CONFIG.instagramUrl} target="_blank" rel="noopener noreferrer">Instagram <ExternalLink size={13} /></a><a href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer">Student App <ExternalLink size={13} /></a>{CONFIG.youtube.map((channel) => <a href={channel.url} target="_blank" rel="noopener noreferrer" key={channel.name}>YouTube · {channel.name}</a>)}<a href="/privacy.html">Privacy Policy</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Padmini Vidhya Niketan</span></div></footer>
+    <footer><div className="footer-inner"><div className="footer-brand"><img width="800" height="298" loading="lazy" src={CONFIG.logo} alt="Padmini Vidhya Niketan logo" /><p>{CONFIG.name}<br />{CONFIG.address}</p></div><div><h4>Sections</h4>{navItems.slice(0, 5).map((item) => <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>)}</div><div><h4>Contact</h4><a href={CONFIG.phoneHref} target="_blank" rel="noopener noreferrer">{CONFIG.phone}</a><a href={CONFIG.email ? `mailto:${CONFIG.email}` : '#'} target="_blank" rel="noopener noreferrer">{CONFIG.email}</a><a href={CONFIG.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp us</a><a href={CONFIG.instagramUrl} target="_blank" rel="noopener noreferrer"><Instagram size={13} aria-hidden="true" /> Instagram <ExternalLink size={13} aria-hidden="true" /></a><a href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer"><Smartphone size={13} aria-hidden="true" /> Student App <ExternalLink size={13} aria-hidden="true" /></a>{CONFIG.youtube.map((channel) => <a href={channel.url} target="_blank" rel="noopener noreferrer" key={channel.name}><Youtube size={13} aria-hidden="true" /> YouTube · {channel.name}</a>)}<a href="/privacy.html">Privacy Policy</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Padmini Vidhya Niketan</span></div></footer>
     <div className="mobile-bar"><a href={CONFIG.phoneHref} target="_blank" rel="noopener noreferrer"><Phone size={18} /> Call</a><a href={CONFIG.whatsapp} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} /> WhatsApp</a></div>
   </div>;
 }
