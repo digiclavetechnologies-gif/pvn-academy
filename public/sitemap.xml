@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://www.pvnedu.com/</loc>
-  </url>
-  <url>
-    <loc>https://www.pvnedu.com/privacy.html</loc>
-  </url>
+  <url><loc>https://www.pvnedu.com/</loc></url>
+  <url><loc>https://www.pvnedu.com/privacy</loc></url>
+  <url><loc>https://www.pvnedu.com/class-10-coaching-laxmi-nagar</loc></url>
+  <url><loc>https://www.pvnedu.com/class-11-coaching-laxmi-nagar</loc></url>
+  <url><loc>https://www.pvnedu.com/class-12-coaching-laxmi-nagar</loc></url>
+  <url><loc>https://www.pvnedu.com/jee-maths-coaching-laxmi-nagar</loc></url>
+  <url><loc>https://www.pvnedu.com/ca-foundation-coaching-laxmi-nagar</loc></url>
+  <url><loc>https://www.pvnedu.com/cma-coaching-laxmi-nagar</loc></url>
 </urlset>
