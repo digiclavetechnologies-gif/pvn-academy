@@ -245,11 +245,11 @@ function App() {
             <a className="button app-button" href={CONFIG.studentAppUrl} target="_blank" rel="noopener noreferrer"><Smartphone size={17} /> Student App <ExternalLink size={14} /></a>
             <a className="button instagram-button" href={CONFIG.instagramUrl} target="_blank" rel="noopener noreferrer"><Instagram size={17} /> Instagram <ExternalLink size={14} /></a>
           </div>
-          <div className="hero-trust"><Star size={16} fill="currentColor" /><span><b>{CONFIG.rating} on Google</b> · {CONFIG.reviewCount} reviews</span></div>
+          <div className="hero-trust"><Star size={16} fill="currentColor" /><span><b>{CONFIG.rating} on Google</b> · {CONFIG.reviewCount} reviews · <b>96% highest result</b></span></div>
         </div>
         <div className="hero-visual reveal">
           <div className="hero-card">
-            <div className="hero-student"><img src={CONFIG.heroPhoto} alt="Amaarendra Kumar with students of Padmini Vidhya Niketan" fetchPriority="high" /></div>
+            <div className="hero-student"><img src={CONFIG.heroPhoto} width="1280" height="960" alt="Amaarendra Kumar with students of Padmini Vidhya Niketan" fetchpriority="high" /></div>
             <div className="float-badge badge-trial"><span><b>10 Days</b><small>Free Trial Classes</small></span></div>
             <div className="float-badge badge-rating"><Star size={16} fill="currentColor" /><span><b>5.0</b><small>on Google · 28 reviews</small></span></div>
           </div>
