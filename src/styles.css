@@ -620,6 +620,7 @@ footer { background: linear-gradient(115deg, #242353, #302f72); }
   .hero-lead { margin-top: 16px; font-size: 15px; }
   .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
   .hero-actions .button { min-width: 0; min-height: 48px; padding-inline: 10px; font-size: 12px; }
+  .hero-actions .button.primary { gap: 6px; padding-inline: 8px; font-size: 11px; white-space: nowrap; }
   .hero-card { min-height: 300px; padding: 18px; border-radius: 23px; animation-duration: 8s; }
   .hero-student { height: 250px; border-radius: 16px; }
   .float-badge { min-height: 46px; padding: 7px 10px; border-radius: 12px; }
@@ -672,6 +673,7 @@ footer { background: linear-gradient(115deg, #242353, #302f72); }
   :root { --page: calc(100% - 28px); }
   .blob-two { width: 120px; }
   .hero-actions .button { gap: 5px; padding-inline: 7px; font-size: 11px; }
+  .hero-actions .button.primary { grid-column: 1 / -1; }
   .course-name { gap: 9px; }
   .course-card a { gap: 3px; }
 }
