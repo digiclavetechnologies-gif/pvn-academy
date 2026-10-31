@@ -269,8 +269,9 @@ footer { padding: 48px 24px 20px; background: #20204f; color: #fff; }
 /* Premium visual layer: preserve the existing content while refining its presentation. */
 :root {
   --navy: #2b2a6b;
-  --blue: #48469a;
-  --warm: #f3b84b;
+  --blue: #3f3d91;
+  --warm: #f5a623;
+  --gold-gradient: linear-gradient(135deg, #ffd76a, #f5a623);
   --ink: #20233c;
   --muted: #656b82;
   --line: #e4e6f0;
@@ -292,9 +293,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   padding-inline: max(24px, calc((100% - 1280px) / 2));
   border-bottom-color: #e9e9f2;
   background: rgb(255 255 255 / 92%);
-  box-shadow: 0 8px 26px rgb(43 42 107 / 5%);
+  box-shadow: 0 4px 16px rgb(43 42 107 / 4%);
   backdrop-filter: blur(14px);
+  transition: box-shadow .22s ease, border-color .22s ease;
 }
+.site-header.is-scrolled { border-bottom-color: #deddec; box-shadow: 0 8px 24px rgb(43 42 107 / 12%); }
 .brand img { width: 58px; height: 54px; }
 .brand strong { font-size: 16px; letter-spacing: -.025em; }
 .brand small { color: #70758c; font-size: 11px; }

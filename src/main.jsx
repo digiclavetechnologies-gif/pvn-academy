@@ -79,6 +79,15 @@ const cleanText = (value, limit) => String(value ?? '')
 
 function useReveal() {
   useEffect(() => {
+    const header = document.querySelector('.site-header');
+    if (!header) return undefined;
+    const updateShadow = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+    updateShadow();
+    window.addEventListener('scroll', updateShadow, { passive: true });
+    return () => window.removeEventListener('scroll', updateShadow);
+  }, []);
+
+  useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
       return undefined;
