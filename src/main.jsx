@@ -50,15 +50,15 @@ const CONFIG = {
     teaches: 'Class 11–12 Maths, IIT-JEE, CA Foundation, CMA Foundation, CMA Inter (Operation Management), CA Final (Operation Research), CS Foundation (Statistics), Graduation and MBA (Maths, Statistics, Quantitative Technique).'
   },
   toppers: [
-    { name: 'Bhumika', score: 96, photo: '/result-bhumika.webp' },
-    { name: 'Karan', score: 95, photo: '/result-karan-95.webp' },
-    { name: 'Khushi', score: 95, photo: '/result-khushi.webp' },
-    { name: 'Ankita', score: 95, photo: '/result-ankita.webp' },
-    { name: 'Jessica Saini', score: 95, photo: '/result-jessica-saini.webp' },
-    { name: 'Priyanshu Sati', score: 95, photo: '/result-priyanshu-sati.webp' },
-    { name: 'Jaanvi Khemka', score: 94, photo: '/result-jaanvi-khemka.webp' },
-    { name: 'Karan', score: 92, photo: '/result-karan-92.webp', objectPosition: 'center 10%' },
-    { name: 'Tushnika Chaudhary', score: 90, photo: '/result-tushnika.webp' }
+    { name: 'Bhumika', score: 96, photo: '/result-bhumika.webp', width: 450, height: 580 },
+    { name: 'Karan', score: 95, photo: '/result-karan-95.webp', width: 198, height: 220 },
+    { name: 'Khushi', score: 95, photo: '/result-khushi.webp', width: 450, height: 468 },
+    { name: 'Ankita', score: 95, photo: '/result-ankita.webp', width: 450, height: 492 },
+    { name: 'Jessica Saini', score: 95, photo: '/result-jessica-saini.webp', width: 450, height: 436 },
+    { name: 'Priyanshu Sati', score: 95, photo: '/result-priyanshu-sati.webp', width: 450, height: 834 },
+    { name: 'Jaanvi Khemka', score: 94, photo: '/result-jaanvi-khemka.webp', width: 440, height: 568 },
+    { name: 'Karan', score: 92, photo: '/result-karan-92.webp', width: 450, height: 1098, objectPosition: 'center 10%' },
+    { name: 'Tushnika Chaudhary', score: 90, photo: '/result-tushnika.webp', width: 450, height: 608 }
   ],
   reviews: [
     'The highlighting point is the quality and commitment of the teaching staff.',
@@ -140,6 +140,34 @@ function useHighlightCounters() {
   }, []);
 }
 
+function useResultsCountUp() {
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const values = document.querySelectorAll('#results [data-count-up]');
+    const frames = new Set();
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      const target = Number(entry.target.dataset.countUp);
+      const suffix = entry.target.textContent.replace(/^[\d.]+/, '');
+      const start = performance.now();
+      const animate = (now) => {
+        const progress = Math.min((now - start) / 900, 1);
+        const eased = 1 - (1 - progress) ** 3;
+        entry.target.textContent = `${Math.round(target * eased)}${suffix}`;
+        if (progress < 1) frames.add(requestAnimationFrame(animate));
+        else entry.target.textContent = `${target}${suffix}`;
+      };
+      frames.add(requestAnimationFrame(animate));
+    }), { threshold: 0.6 });
+    values.forEach((value) => observer.observe(value));
+    return () => {
+      observer.disconnect();
+      frames.forEach(cancelAnimationFrame);
+    };
+  }, []);
+}
+
 function SectionTitle({ eyebrow, title, copy }) {
   return <div className="section-title reveal">
     <span className="eyebrow">{eyebrow}</span>
@@ -153,6 +181,7 @@ function App() {
   const [formState, setFormState] = useState('idle');
   useReveal();
   useHighlightCounters();
+  useResultsCountUp();
 
   useEffect(() => {
     document.title = window.location.pathname === '/' || window.location.pathname === '/index.html'
@@ -310,7 +339,12 @@ function App() {
 
       <section className="section results-section" id="results">
         <SectionTitle eyebrow="Results" title="Our toppers" />
-        <div className="topper-grid">{CONFIG.toppers.map(({ name, score, photo, objectPosition }, index) => <figure className="topper-card reveal" key={`${name}-${index}`}><img className="topper-avatar" loading="lazy" decoding="async" src={photo} alt={`${name}, student topper at Padmini Vidhya Niketan`} style={objectPosition ? { objectPosition } : undefined} /><figcaption><strong>{name}</strong><span>{score}%</span></figcaption></figure>)}</div>
+        <div className="results-stats" aria-label="Results highlights">
+          <div><strong><span data-count-up="96">96</span>%</strong><span>Highest score</span></div>
+          <div><strong>9</strong><span>Toppers at 90% or above</span></div>
+          <div><strong>5.0</strong><span>Google rating</span></div>
+        </div>
+        <div className="topper-grid">{CONFIG.toppers.map(({ name, score, photo, width, height, objectPosition }, index) => <figure className="topper-card reveal" key={`${name}-${index}`}><img className="topper-avatar" width={width} height={height} loading="lazy" decoding="async" src={photo} alt={`${name}, student topper at Padmini Vidhya Niketan`} style={objectPosition ? { objectPosition } : undefined} /><figcaption><strong>{name}</strong><span data-count-up={score}>{score}%</span></figcaption></figure>)}</div>
       </section>
 
       <section className="section videos-section" id="videos">
