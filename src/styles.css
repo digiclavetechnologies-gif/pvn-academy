@@ -179,7 +179,7 @@ footer { padding: 48px 24px 20px; background: #20204f; color: #fff; }
 .footer-inner { width: var(--page); margin: auto; display: grid; grid-template-columns: 2fr 1fr 1.2fr; gap: 40px; }
 .footer-brand img { width: 96px; max-height: 62px; object-fit: contain; padding: 4px; background: #fff; }
 .footer-brand p { max-width: 320px; margin-top: 14px; color: #e0e2ee; font-size: 12px; }
-.footer-inner h4 { margin-bottom: 12px; color: #fff; font-size: 13px; }
+.footer-inner h2 { margin-bottom: 12px; color: #fff; font-size: 13px; }
 .footer-inner > div:not(:first-child) a { width: fit-content; margin: 8px 0; display: flex; align-items: center; gap: 6px; color: #e0e2ee; font-size: 12px; }
 .footer-inner a:hover { color: var(--warm) !important; }
 .footer-bottom { width: var(--page); margin: 32px auto 0; padding-top: 16px; border-top: 1px solid #ffffff45; color: #e0e2ee; font-size: 11px; }
